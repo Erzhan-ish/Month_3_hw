@@ -18,15 +18,20 @@ async def start_review(callback_query: types.CallbackQuery, state: FSMContext):
     await state.set_state(RestourantReview.name)
     await callback_query.message.answer("Как вас зовут?")
 
+
 @review_router.message(RestourantReview.name)
 async def process_name(message: types.Message, state: FSMContext):
     await state.set_state(RestourantReview.phone_number)
+    await state.update_data(name=message.text)
     await message.answer("Ваш номер телефона")
+
 
 @review_router.message(RestourantReview.phone_number)
 async def process_phone_number(message: types.Message, state: FSMContext):
     await state.set_state(RestourantReview.visit_date)
     await message.answer("Дата вашего визита")
+    await state.update_data(phone_number=message.text)
+
 
 @review_router.message(RestourantReview.visit_date)
 async def process_food_rating(message: types.Message, state: FSMContext):
@@ -35,6 +40,8 @@ async def process_food_rating(message: types.Message, state: FSMContext):
                          "1-4 - плохо\n"
                          "5-7 - хорошо\n"
                          "7-10 - отлично")
+    await state.update_data(visit_date=message.text)
+
 
 @review_router.message(RestourantReview.food_rating)
 async def process_cleanliness_rating(message: types.Message, state: FSMContext):
@@ -43,13 +50,20 @@ async def process_cleanliness_rating(message: types.Message, state: FSMContext):
                          "1-4 - плохо\n"
                          "5-7 - хорошо\n"
                          "7-10 - отлично")
+    await state.update_data(food_rating=message.text)
+
 
 @review_router.message(RestourantReview.cleanliness_rating)
 async def process_extra_comments(message: types.Message, state: FSMContext):
     await state.set_state(RestourantReview.extra_comments)
     await message.answer("Дополнительные коментарии/Жалобы")
+    await state.update_data(cleanliness_rating=message.text)
+
 
 @review_router.message(RestourantReview.extra_comments)
 async def process_extra_comments(message: types.Message, state: FSMContext):
     await message.answer("Спасибо за оставленый отзыв!")
+    await state.update_data(extra_comments=message.text)
+    data = await state.get_data()
+    print(data)
     await state.clear()
