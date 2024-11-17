@@ -1,3 +1,5 @@
+from multiprocessing.connection import Connection
+
 from aiogram import Router, F, types
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
@@ -13,6 +15,12 @@ class RestourantReview(StatesGroup):
     food_rating = State()
     cleanliness_rating = State()
     extra_comments = State()
+
+@review_router.message(F.text.in_(["stop", "стоп"]))
+async def stop_review(message: types.Message, state: FSMContext):
+    await state.clear()
+    await message.answer("Отзыв прерван")
+
 
 @review_router.callback_query(F.data == "review")
 async def start_review(callback_query: types.CallbackQuery, state: FSMContext):
