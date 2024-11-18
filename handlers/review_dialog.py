@@ -14,6 +14,13 @@ class RestourantReview(StatesGroup):
     cleanliness_rating = State()
     extra_comments = State()
 
+
+food_rating_num = {
+    "Плохо": 1,
+    "Хорошо": 3,
+    "Отлично": 5
+}
+
 @review_router.message(F.text.in_(["stop", "стоп"]))
 async def stop_review(message: types.Message, state: FSMContext):
     await state.clear()
@@ -72,9 +79,12 @@ async def process_food_rating(message: types.Message, state: FSMContext):
 @review_router.message(RestourantReview.food_rating, F.text.in_(["Плохо","Хорошо","Отлично"]))
 async def process_cleanliness_rating(message: types.Message, state: FSMContext):
     kb = types.ReplyKeyboardRemove()
-    await state.update_data(food_rating=message.text)
-    await state.set_state(RestourantReview.cleanliness_rating)
-    await message.answer("Как оцениваете чистоту заведения\n"
+    food_ratingg = message.text
+    if food_ratingg in food_rating_num:
+        food_rating_val = food_rating_num[food_ratingg]
+        await state.update_data(food_rating=food_rating_val)
+        await state.set_state(RestourantReview.cleanliness_rating)
+        await message.answer("Как оцениваете чистоту заведения\n"
                          "от 1 до 10", reply_markup=kb)
 
 

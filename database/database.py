@@ -13,7 +13,7 @@ class Database:
                         name VARCHAR(15) NOT NULL,
                         phone_number TEXT NOT NULL,
                         visit_date TEXT NOT NULL,
-                        food_rating VARCHAR(15) NOT NULL,
+                        food_rating INTEGER NOT NULL,
                         cleanliness_rating INTEGER NOT NULL,
                         extra_comments TEXT NOT NULL
                     )   
