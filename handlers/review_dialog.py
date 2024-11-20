@@ -1,5 +1,5 @@
 from aiogram import Router, F, types
-from aiogram.fsm.state import State, StatesGroup
+from aiogram.fsm.state import State, StatesGroup, default_state
 from aiogram.fsm.context import FSMContext
 
 from bot_config import review_answer
@@ -27,7 +27,7 @@ async def stop_review(message: types.Message, state: FSMContext):
     await message.answer("Отзыв прерван")
 
 
-@review_router.callback_query(F.data == "review")
+@review_router.callback_query(F.data == "review", default_state)
 async def start_review(callback_query: types.CallbackQuery, state: FSMContext):
     await state.set_state(RestourantReview.name)
     await callback_query.message.answer("Как вас зовут?")

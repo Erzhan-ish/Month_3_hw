@@ -1,6 +1,8 @@
 from bot_config import dp, bot, review_answer
 import asyncio
 
+from handlers.admin_restaurant import admin_rest_router
+from handlers.dishes import dish_router
 from handlers.myinfo import myinfo_router
 from handlers.random import random_router
 from handlers.review_dialog import review_router
@@ -15,6 +17,8 @@ async def main():
     dp.include_router(myinfo_router)
     dp.include_router(start_router)
     dp.include_router(review_router)
+    dp.include_router(admin_rest_router)
+    dp.include_router(dish_router)
 
     dp.startup.register(on_startup)
     await dp.start_polling(bot)
