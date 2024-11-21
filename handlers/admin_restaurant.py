@@ -7,9 +7,9 @@ from bot_config import review_answer
 
 admin_rest_router = Router()
 
-# @admin_rest_router.message.filter(
-#     F.from_user.id == 5747517813
-# )
+admin_rest_router.message.filter(
+    F.from_user.id == 5747517813
+)
 
 class Dishes(StatesGroup):
     name = State()

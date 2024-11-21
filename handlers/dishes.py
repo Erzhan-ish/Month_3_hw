@@ -8,7 +8,7 @@ dish_router = Router()
 @dish_router.message(Command("menu"))
 async def menu(message: types.Message):
     all_dishes = review_answer.fetch(
-        "SELECT * FROM dishes"
+        "SELECT * FROM dishes ORDER BY price DESC"
     )
     print(all_dishes)
     await message.answer("Блюда нашего меню")
