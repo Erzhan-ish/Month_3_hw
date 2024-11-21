@@ -3,7 +3,7 @@ from aiogram.fsm.state import State, StatesGroup, default_state
 from aiogram.fsm.context import FSMContext
 from aiogram.filters import Command
 
-from bot_config import review_answer
+from bot_config import database
 
 admin_rest_router = Router()
 
@@ -46,7 +46,7 @@ async def process_cooking_time(message: types.Message, state: FSMContext):
     print(data)
     await state.clear()
 
-    review_answer.execute(
+    database.execute(
         query="""
         INSERT INTO dishes (name, price, cooking_time)
         VALUES(?, ?, ?)

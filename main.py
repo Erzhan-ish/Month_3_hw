@@ -1,4 +1,4 @@
-from bot_config import dp, bot, review_answer
+from bot_config import dp, bot, database
 import asyncio
 
 from handlers.admin_restaurant import admin_rest_router
@@ -10,7 +10,7 @@ from handlers.start import start_router
 
 async def on_startup(bot):
     await bot.send_message(chat_id=5747517813,text="Я тут")
-    review_answer.create_tables()
+    database.create_tables()
 
 async def main():
     dp.include_router(random_router)

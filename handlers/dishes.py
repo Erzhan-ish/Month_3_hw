@@ -1,13 +1,13 @@
 from aiogram import F, Router, types
 from aiogram.filters import Command
 
-from bot_config import review_answer
+from bot_config import database
 
 dish_router = Router()
 
 @dish_router.message(Command("menu"))
 async def menu(message: types.Message):
-    all_dishes = review_answer.fetch(
+    all_dishes = database.fetch(
         "SELECT * FROM dishes ORDER BY price DESC"
     )
     print(all_dishes)

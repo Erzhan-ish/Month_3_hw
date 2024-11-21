@@ -2,7 +2,7 @@ from aiogram import Router, F, types
 from aiogram.fsm.state import State, StatesGroup, default_state
 from aiogram.fsm.context import FSMContext
 
-from bot_config import review_answer
+from bot_config import database
 
 review_router = Router()
 
@@ -107,7 +107,7 @@ async def process_extra_comments(message: types.Message, state: FSMContext):
     print(data)
     await state.clear()
 
-    review_answer.execute(
+    database.execute(
         query="""
             INSERT INTO reviews (name, phone_number, visit_date, food_rating, cleanliness_rating, extra_comments)
             VALUES (?, ?, ?, ?, ?, ?)
