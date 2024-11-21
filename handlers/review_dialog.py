@@ -13,7 +13,7 @@ class RestourantReview(StatesGroup):
     food_rating = State()
     cleanliness_rating = State()
     extra_comments = State()
-
+    confirm = State()
 
 food_rating_num = {
     "Плохо": 1,
@@ -103,9 +103,28 @@ async def process_extra_comments(message: types.Message, state: FSMContext):
 async def process_extra_comments(message: types.Message, state: FSMContext):
     await message.answer("Спасибо за оставленый отзыв!")
     await state.update_data(extra_comments=message.text)
-    data = await state.get_data()
-    print(data)
-    await state.clear()
+    await state.set_state(RestourantReview.confirm)
+    kb = types.ReplyKeyboardMarkup(
+        keyboard=[
+            [
+                types.KeyboardButton(text="Да"),
+                types.KeyboardButton(text="Нет")
+            ]
+        ]
+    )
+    await message.answer("Сохранять ваши ответы?", reply_markup=kb)
+
+@review_router.message(RestourantReview.confirm, F.text.in_(["Да", "Нет"]))
+async def process_confirm(message: types.Message, state: FSMContext):
+    kb = types.ReplyKeyboardRemove()
+    if message.text == "Да":
+        await message.answer("Овтеты успешно добавлены!", reply_markup=kb)
+        data = await state.get_data()
+        print(data)
+        await state.clear()
+    if message.text == "Нет":
+        await message.answer("ОК", reply_markup=kb)
+        await state.clear()
 
     database.execute(
         query="""
